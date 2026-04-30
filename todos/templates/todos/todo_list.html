@@ -1,0 +1,415 @@
+{% extends 'todos/base.html' %}
+{% block title %}Muwoni — Tasks{% endblock %}
+{% block status_label %}{{ todos|length }} Task{% if todos|length != 1 %}s{% endif %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ── Section label ── */
+    .section-label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--ink-ghost);
+        margin: 22px 0 10px;
+    }
+
+    /* ── Progress strip ── */
+    .progress-wrap { margin-bottom: 22px; }
+
+    .progress-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 7px;
+    }
+
+    .progress-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--ink-tertiary);
+    }
+
+    .progress-count {
+        font-family: 'Fraunces', serif;
+        font-size: 13px;
+        color: var(--ink-secondary);
+    }
+
+    .progress-track {
+        height: 5px;
+        background: var(--border-strong);
+        border-radius: 99px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent) 0%, #5ECFB0 100%);
+        border-radius: 99px;
+        transition: width 0.7s var(--ease-out);
+        box-shadow: 0 0 8px rgba(46,111,232,0.30);
+    }
+
+    /* ── Todo list container ── */
+    .todo-list {
+        display: flex;
+        flex-direction: column;
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        border: 1px solid var(--border-strong);
+        background: var(--glass);
+        box-shadow: var(--shadow-sm),
+                    inset 0 1px 0 var(--glass-border);
+        transition: background 0.40s ease, border-color 0.40s ease;
+    }
+
+    /* ── Todo row ── */
+    .todo-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 15px 18px;
+        background: transparent;
+        border-bottom: 1px solid var(--border);
+        transition:
+            background 0.18s ease,
+            transform 0.20s var(--spring);
+        position: relative;
+        animation: rowIn 0.40s var(--ease-out) both;
+        cursor: default;
+    }
+
+    .todo-item:last-child { border-bottom: none; }
+
+    .todo-item:hover { background: var(--accent-soft); }
+
+    .todo-item.completed { opacity: 0.58; }
+
+    .todo-item.completed .todo-title {
+        text-decoration: line-through;
+        color: var(--ink-tertiary);
+    }
+
+    @keyframes rowIn {
+        from { opacity: 0; transform: translateX(-10px); }
+        to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .todo-item:nth-child(1)  { animation-delay: 0.04s; }
+    .todo-item:nth-child(2)  { animation-delay: 0.08s; }
+    .todo-item:nth-child(3)  { animation-delay: 0.12s; }
+    .todo-item:nth-child(4)  { animation-delay: 0.16s; }
+    .todo-item:nth-child(5)  { animation-delay: 0.20s; }
+    .todo-item:nth-child(6)  { animation-delay: 0.24s; }
+    .todo-item:nth-child(7)  { animation-delay: 0.28s; }
+    .todo-item:nth-child(8)  { animation-delay: 0.32s; }
+    .todo-item:nth-child(9)  { animation-delay: 0.36s; }
+    .todo-item:nth-child(10) { animation-delay: 0.40s; }
+
+    /* ── Toggle form ── */
+    .toggle-form {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
+    /* ── Circular checkbox ── */
+    .check-btn {
+        flex-shrink: 0;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 1.5px solid var(--ink-ghost);
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0;
+        color: transparent;
+        transition:
+            background 0.22s var(--spring),
+            border-color 0.2s ease,
+            transform 0.20s var(--spring),
+            box-shadow 0.2s ease;
+        padding: 0;
+    }
+
+    .check-btn:hover {
+        border-color: var(--success);
+        transform: scale(1.14);
+    }
+
+    .check-btn:active { transform: scale(0.88) !important; }
+
+    .todo-item.completed .check-btn {
+        background: var(--success);
+        border-color: var(--success);
+        font-size: 11px;
+        color: #fff;
+        box-shadow: 0 0 12px var(--success-mid);
+    }
+
+    /* ── Todo text button ── */
+    .todo-text-btn {
+        flex: 1;
+        min-width: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        padding: 0;
+    }
+
+    .todo-title {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--ink);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: color 0.2s ease;
+        letter-spacing: -0.1px;
+    }
+
+    .todo-description {
+        font-size: 12.5px;
+        color: var(--ink-tertiary);
+        margin-top: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ── Delete button ── */
+    .delete-link {
+        flex-shrink: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        color: var(--danger);
+        background: var(--danger-soft);
+        text-decoration: none;
+        opacity: 0;
+        transform: scale(0.75);
+        transition:
+            opacity 0.18s ease,
+            transform 0.20s var(--spring),
+            background 0.15s ease;
+    }
+
+    .todo-item:hover .delete-link {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .delete-link:hover {
+        background: var(--danger-mid);
+        transform: scale(1.12) !important;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+        text-align: center;
+        padding: 64px 20px;
+        animation: fadeUp 0.55s var(--ease-out) both;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .empty-icon {
+        font-size: 48px;
+        display: block;
+        margin-bottom: 18px;
+        filter: saturate(0.7);
+    }
+
+    .empty-title {
+        font-family: 'Fraunces', serif;
+        font-size: 22px;
+        font-weight: 500;
+        color: var(--ink);
+        letter-spacing: -0.4px;
+        margin-bottom: 8px;
+    }
+
+    .empty-sub {
+        font-size: 14px;
+        color: var(--ink-tertiary);
+        line-height: 1.6;
+        margin-bottom: 28px;
+    }
+
+    /* ── All-done banner ── */
+    .all-done-banner {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 18px;
+        background: var(--success-soft);
+        border: 1px solid var(--success-mid);
+        border-radius: var(--r-md);
+        margin-bottom: 20px;
+        animation: fadeUp 0.40s var(--ease-out) both;
+    }
+
+    .all-done-banner.visible { display: flex; }
+
+    .all-done-banner span {
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--success);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="page-header">
+    <h1 class="page-title">My Tasks</h1>
+    <a href="{% url 'todo_create' %}" class="btn btn-primary">＋&thinsp;New</a>
+</div>
+
+{% if todos %}
+    <!-- All-done banner (shown via JS when 100%) -->
+    <div class="all-done-banner" id="allDoneBanner">
+        <span>🎉</span>
+        <span>All tasks complete — you're on fire today!</span>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+        <div class="progress-meta">
+            <span class="progress-label">Completion</span>
+            <span class="progress-count" id="progress-text">—</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+    </div>
+
+    <p class="section-label">All Tasks</p>
+
+    <div class="todo-list">
+        {% for todo in todos %}
+        <div class="todo-item {% if todo.completed %}completed{% endif %}"
+             data-title="{{ todo.title|escapejs }}">
+
+            <!-- Toggle form -->
+            <form method="post" action="{% url 'todo_toggle' todo.id %}"
+                  class="toggle-form">
+                {% csrf_token %}
+                <button type="submit" class="check-btn"
+                        title="{% if todo.completed %}Unmark{% else %}Complete{% endif %}">
+                    {% if todo.completed %}✓{% endif %}
+                </button>
+                <button type="submit" class="todo-text-btn">
+                    <div class="todo-title">{{ todo.title }}</div>
+                    {% if todo.description %}
+                    <div class="todo-description">{{ todo.description }}</div>
+                    {% endif %}
+                </button>
+            </form>
+
+            <!-- Delete -->
+            <a href="{% url 'todo_delete' todo.id %}"
+               class="delete-link" title="Delete">✕</a>
+        </div>
+        {% endfor %}
+    </div>
+
+{% else %}
+    <div class="empty-state">
+        <span class="empty-icon">🌿</span>
+        <div class="empty-title">All clear</div>
+        <p class="empty-sub">Your task list is empty.<br>Add something to get moving.</p>
+        <a href="{% url 'todo_create' %}" class="btn btn-primary">＋&thinsp;Add First Task</a>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    /* ─── Progress bar ─── */
+    const items  = document.querySelectorAll('.todo-item');
+    const done   = document.querySelectorAll('.todo-item.completed');
+    const fill   = document.getElementById('progress-fill');
+    const text   = document.getElementById('progress-text');
+    const banner = document.getElementById('allDoneBanner');
+
+    if (fill && items.length) {
+        const pct = Math.round((done.length / items.length) * 100);
+        requestAnimationFrame(() => {
+            fill.style.width = pct + '%';
+            text.textContent = `${done.length} of ${items.length} done`;
+        });
+
+        /* Show all-done banner if everything is complete */
+        if (pct === 100 && banner) banner.classList.add('visible');
+    }
+
+    /* ─── Award trigger: check sessionStorage for a just-completed task ─── */
+    try {
+        const completedTask  = sessionStorage.getItem('muwoni-completed-task');
+        const completedCount = parseInt(sessionStorage.getItem('muwoni-completed-count') || '0', 10);
+
+        if (completedTask) {
+            sessionStorage.removeItem('muwoni-completed-task');
+
+            /* Delay so the page has finished painting */
+            setTimeout(() => {
+                /* Basic completion award */
+                window.onTaskCompleted(completedTask);
+
+                /* Milestone awards */
+                if (completedCount === 1) {
+                    setTimeout(() => window.grantAward('first_task'), 900);
+                } else if (completedCount > 0 && completedCount % 5 === 0) {
+                    setTimeout(() => window.grantAward('streak_5'), 900);
+                } else if (completedCount > 0 && completedCount % 3 === 0) {
+                    setTimeout(() => window.grantAward('streak_3'), 900);
+                }
+
+                /* All-done award if every task is now complete */
+                if (items.length > 0 && done.length === items.length) {
+                    setTimeout(() => window.grantAward('daily_done'), 1400);
+                }
+            }, 650);
+        }
+    } catch(e) {}
+
+    /* ─── Intercept toggle-form submit to store task name before navigation ─── */
+    document.querySelectorAll('.toggle-form').forEach(form => {
+        form.addEventListener('submit', () => {
+            const item = form.closest('.todo-item');
+            const isCompleted = item.classList.contains('completed');
+
+            /* Only fire award when MARKING complete (not un-marking) */
+            if (!isCompleted) {
+                const title = item.dataset.title || item.querySelector('.todo-title')?.textContent?.trim() || 'Task';
+                try {
+                    sessionStorage.setItem('muwoni-completed-task', title);
+                    /* Track cumulative count */
+                    const prev = parseInt(sessionStorage.getItem('muwoni-completed-count') || '0', 10);
+                    sessionStorage.setItem('muwoni-completed-count', String(prev + 1));
+                } catch(e) {}
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

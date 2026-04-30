@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Muwoni{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ─────────────────────────────────────────
+           DESIGN TOKENS — LIGHT
+        ───────────────────────────────────────── */
+        :root,
+        [data-theme="light"] {
+            --bg:             #F0EEE9;
+            --glass:          rgba(255, 255, 255, 0.72);
+            --glass-border:   rgba(255, 255, 255, 0.92);
+
+            --ink:            #1A1620;
+            --ink-secondary:  #5C5870;
+            --ink-tertiary:   #9895AA;
+            --ink-ghost:      #C8C5D4;
+
+            --accent:         #2E6FE8;
+            --accent-soft:    rgba(46, 111, 232, 0.10);
+            --accent-mid:     rgba(46, 111, 232, 0.22);
+            --accent-hover:   #1D5ED4;
+
+            --danger:         #D93B28;
+            --danger-soft:    rgba(217, 59, 40, 0.09);
+            --danger-mid:     rgba(217, 59, 40, 0.18);
+
+            --success:        #1A9E5E;
+            --success-soft:   rgba(26, 158, 94, 0.10);
+            --success-mid:    rgba(26, 158, 94, 0.20);
+
+            --border:         rgba(0, 0, 0, 0.07);
+            --border-strong:  rgba(0, 0, 0, 0.11);
+            --shadow-sm:      0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+            --shadow-card:    0 12px 48px rgba(0,0,0,0.09), 0 3px 10px rgba(0,0,0,0.05);
+            --shadow-btn:     0 4px 16px rgba(46,111,232,0.28);
+            --blur:           saturate(200%) blur(28px);
+
+            /* orb opacities */
+            --orb1-opacity: 0.60;
+            --orb2-opacity: 0.55;
+            --orb3-opacity: 0.60;
+            --orb4-opacity: 0.52;
+            --orb5-opacity: 0.40;
+
+            --nav-bg:    rgba(240, 238, 233, 0.78);
+            --footer-bg: rgba(255, 255, 255, 0.55);
+
+            --toggle-track: rgba(0,0,0,0.10);
+            --toggle-thumb: #fff;
+            --toggle-shadow: 0 2px 8px rgba(0,0,0,0.20);
+
+            --input-bg: rgba(255,255,255,0.85);
+            --input-focus-bg: #fff;
+        }
+
+        /* ─────────────────────────────────────────
+           DESIGN TOKENS — DARK
+        ───────────────────────────────────────── */
+        [data-theme="dark"] {
+            --bg:             #0E0D12;
+            --glass:          rgba(26, 24, 36, 0.80);
+            --glass-border:   rgba(255, 255, 255, 0.08);
+
+            --ink:            #EDEAF5;
+            --ink-secondary:  #9D99B8;
+            --ink-tertiary:   #5E5A78;
+            --ink-ghost:      #35324A;
+
+            --accent:         #5B93FF;
+            --accent-soft:    rgba(91, 147, 255, 0.12);
+            --accent-mid:     rgba(91, 147, 255, 0.25);
+            --accent-hover:   #4A82EE;
+
+            --danger:         #FF6B5B;
+            --danger-soft:    rgba(255, 107, 91, 0.12);
+            --danger-mid:     rgba(255, 107, 91, 0.22);
+
+            --success:        #3DD68C;
+            --success-soft:   rgba(61, 214, 140, 0.12);
+            --success-mid:    rgba(61, 214, 140, 0.22);
+
+            --border:         rgba(255, 255, 255, 0.06);
+            --border-strong:  rgba(255, 255, 255, 0.10);
+            --shadow-sm:      0 1px 3px rgba(0,0,0,0.30), 0 1px 2px rgba(0,0,0,0.20);
+            --shadow-card:    0 12px 48px rgba(0,0,0,0.50), 0 3px 10px rgba(0,0,0,0.30);
+            --shadow-btn:     0 4px 16px rgba(91,147,255,0.30);
+
+            --orb1-opacity: 0.28;
+            --orb2-opacity: 0.22;
+            --orb3-opacity: 0.25;
+            --orb4-opacity: 0.20;
+            --orb5-opacity: 0.18;
+
+            --nav-bg:    rgba(14, 13, 18, 0.85);
+            --footer-bg: rgba(20, 18, 28, 0.70);
+
+            --toggle-track: rgba(91,147,255,0.30);
+            --toggle-thumb: var(--accent);
+            --toggle-shadow: 0 2px 10px rgba(91,147,255,0.45);
+
+            --input-bg: rgba(255,255,255,0.05);
+            --input-focus-bg: rgba(255,255,255,0.08);
+        }
+
+        *, *::before, *::after {
+            margin: 0; padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.40s ease, color 0.40s ease;
+        }
+
+        /* ─────────────────────────────────────────
+           ANIMATED ORB BACKGROUND
+        ───────────────────────────────────────── */
+        .orb-stage {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            will-change: transform;
+            transition: opacity 0.60s ease;
+        }
+
+        .orb-1 {
+            width: 700px; height: 700px;
+            background: radial-gradient(circle at 40% 40%, #80C8FF 0%, #4AAEE8 50%, transparent 75%);
+            filter: blur(72px);
+            opacity: var(--orb1-opacity);
+            top: -200px; left: -180px;
+            animation: drift1 20s var(--ease-inout) infinite alternate;
+        }
+
+        .orb-2 {
+            width: 600px; height: 600px;
+            background: radial-gradient(circle at 50% 50%, #72EDD0 0%, #38D4AA 55%, transparent 78%);
+            filter: blur(80px);
+            opacity: var(--orb2-opacity);
+            bottom: -160px; right: -120px;
+            animation: drift2 24s var(--ease-inout) infinite alternate;
+        }
+
+        .orb-3 {
+            width: 480px; height: 480px;
+            background: radial-gradient(circle at 45% 45%, #FFCBB4 0%, #FFB090 55%, transparent 78%);
+            filter: blur(70px);
+            opacity: var(--orb3-opacity);
+            top: 30%; right: 5%;
+            animation: drift3 17s var(--ease-inout) infinite alternate;
+        }
+
+        .orb-4 {
+            width: 400px; height: 400px;
+            background: radial-gradient(circle at 50% 50%, #D8BFFF 0%, #BC9DFF 55%, transparent 78%);
+            filter: blur(65px);
+            opacity: var(--orb4-opacity);
+            top: 48%; left: 10%;
+            animation: drift4 22s var(--ease-inout) infinite alternate;
+        }
+
+        .orb-5 {
+            width: 300px; height: 300px;
+            background: radial-gradient(circle at 50% 50%, #FFE999 0%, #FFD55A 60%, transparent 80%);
+            filter: blur(60px);
+            opacity: var(--orb5-opacity);
+            top: 4%; right: 18%;
+            animation: drift5 15s var(--ease-inout) infinite alternate;
+        }
+
+        --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+
+        @keyframes drift1 {
+            0%   { transform: translate(0,0) scale(1); }
+            40%  { transform: translate(55px, 45px) scale(1.06); }
+            75%  { transform: translate(25px, 85px) scale(0.96); }
+            100% { transform: translate(75px, 35px) scale(1.04); }
+        }
+        @keyframes drift2 {
+            0%   { transform: translate(0,0) scale(1); }
+            35%  { transform: translate(-55px,-60px) scale(1.08); }
+            70%  { transform: translate(-80px,-20px) scale(0.94); }
+            100% { transform: translate(-35px,-72px) scale(1.05); }
+        }
+        @keyframes drift3 {
+            0%   { transform: translate(0,0) scale(1); }
+            50%  { transform: translate(-45px, 55px) scale(1.10); }
+            100% { transform: translate(35px,-35px) scale(0.95); }
+        }
+        @keyframes drift4 {
+            0%   { transform: translate(0,0) scale(1); }
+            30%  { transform: translate(55px,-42px) scale(1.07); }
+            65%  { transform: translate(-30px,30px) scale(0.93); }
+            100% { transform: translate(42px,-58px) scale(1.04); }
+        }
+        @keyframes drift5 {
+            0%   { transform: translate(0,0) scale(1); }
+            60%  { transform: translate(-65px,42px) scale(1.12); }
+            100% { transform: translate(28px,-22px) scale(0.90); }
+        }
+
+        .orb-stage::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
+            opacity: 0.5;
+        }
+
+        /* ─────────────────────────────────────────
+           NAVIGATION BAR
+        ───────────────────────────────────────── */
+        .nav-bar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 200;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            background: var(--nav-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+            transition: background 0.40s ease;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            object-fit: contain;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+        }
+
+        .nav-name {
+            font-family: 'Fraunces', serif;
+            font-size: 17px;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+            color: var(--ink);
+            transition: color 0.40s ease;
+        }
+
+        .nav-badge {
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            color: var(--accent);
+            background: var(--accent-soft);
+            padding: 4px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--accent-mid);
+            transition: all 0.40s ease;
+        }
+
+        /* ─────────────────────────────────────────
+           DARK MODE TOGGLE
+        ───────────────────────────────────────── */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .theme-toggle-icon {
+            font-size: 14px;
+            transition: transform 0.40s var(--spring), opacity 0.30s ease;
+            line-height: 1;
+        }
+
+        .theme-toggle-track {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--toggle-track);
+            border-radius: 999px;
+            border: 1px solid var(--border-strong);
+            transition: background 0.35s ease, border-color 0.35s ease;
+            cursor: pointer;
+        }
+
+        .theme-toggle-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--toggle-thumb);
+            box-shadow: var(--toggle-shadow);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        background 0.35s ease,
+                        box-shadow 0.35s ease;
+        }
+
+        [data-theme="dark"] .theme-toggle-thumb {
+            transform: translateX(20px);
+        }
+
+        [data-theme="dark"] .icon-sun  { opacity: 0.4; transform: rotate(-30deg) scale(0.85); }
+        [data-theme="dark"] .icon-moon { opacity: 1;   transform: rotate(0deg) scale(1); }
+        [data-theme="light"] .icon-sun  { opacity: 1; transform: rotate(0deg) scale(1); }
+        [data-theme="light"] .icon-moon { opacity: 0.4; transform: rotate(30deg) scale(0.85); }
+
+        /* ─────────────────────────────────────────
+           SCAFFOLD
+        ───────────────────────────────────────── */
+        .scaffold {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 78px 20px 30px;
+        }
+
+        /* ─────────────────────────────────────────
+           MAIN CARD
+        ───────────────────────────────────────── */
+        .card {
+            width: 100%;
+            max-width: 660px;
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            box-shadow: var(--shadow-card),
+                        inset 0 1px 0 rgba(255,255,255,0.12);
+            padding: 36px 34px 42px;
+            animation: cardReveal 0.60s cubic-bezier(0.22, 1, 0.36, 1) both;
+            transition: background 0.40s ease, border-color 0.40s ease, box-shadow 0.40s ease;
+        }
+
+        /* ─────────────────────────────────────────
+           TWO-COLUMN LAYOUT WITH CALENDAR
+        ───────────────────────────────────────── */
+        .content-wrapper {
+            width: 100%;
+            max-width: 1020px;
+            display: grid;
+            grid-template-columns: 660px 320px;
+            gap: 28px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 660px;
+            }
+        }
+
+        /* ─────────────────────────────────────────
+           MINI CALENDAR
+        ───────────────────────────────────────── */
+        .calendar-card {
+            background: var(--glass);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            box-shadow: var(--shadow-card),
+                        inset 0 1px 0 rgba(255,255,255,0.12);
+            padding: 24px 20px;
+            animation: cardReveal 0.60s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+            position: sticky;
+            top: 78px;
+            transition: background 0.40s ease, border-color 0.40s ease;
+        }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .calendar-month {
+            font-family: 'Fraunces', serif;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--ink);
+            transition: color 0.40s ease;
+        }
+
+        .calendar-nav { display: flex; gap: 4px; }
+
+        .calendar-nav-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink-secondary);
+            transition: all 0.15s ease;
+            font-size: 16px;
+        }
+
+        .calendar-nav-btn:hover {
+            background: var(--border-strong);
+            transform: scale(1.05);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+
+        .calendar-day-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ink-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 0;
+        }
+
+        .calendar-date {
+            font-size: 13px;
+            padding: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--ink-secondary);
+            transition: all 0.15s ease;
+        }
+
+        .calendar-date:hover { background: var(--border); }
+
+        .calendar-date.today {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .calendar-date.other-month { color: var(--ink-ghost); }
+
+        .calendar-date.has-task::after {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin: 2px auto 0;
+        }
+
+        .calendar-date.today.has-task::after { background: #fff; }
+
+        @keyframes cardReveal {
+            from { opacity: 0; transform: translateY(30px) scale(0.972); }
+            to   { opacity: 1; transform: translateY(0)    scale(1);     }
+        }
+
+        /* ─────────────────────────────────────────
+           PAGE HEADER
+        ───────────────────────────────────────── */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .page-title {
+            font-family: 'Fraunces', serif;
+            font-size: 30px;
+            font-weight: 500;
+            letter-spacing: -0.7px;
+            color: var(--ink);
+            line-height: 1.1;
+            transition: color 0.40s ease;
+        }
+
+        /* ─────────────────────────────────────────
+           BUTTONS
+        ───────────────────────────────────────── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 999px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: -0.1px;
+            cursor: pointer;
+            text-decoration: none;
+            transition:
+                transform 0.20s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.20s cubic-bezier(0.22, 1, 0.36, 1),
+                background 0.15s ease;
+            white-space: nowrap;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .btn:active { transform: scale(0.93) !important; }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: var(--shadow-btn);
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: scale(1.04) translateY(-1px);
+            box-shadow: 0 7px 22px rgba(46,111,232,0.38);
+        }
+
+        .btn-danger {
+            background: var(--danger-soft);
+            color: var(--danger);
+            border: 1px solid var(--danger-mid);
+        }
+        .btn-danger:hover { background: var(--danger-mid); transform: scale(1.03); }
+
+        .btn-success {
+            background: var(--success-soft);
+            color: var(--success);
+            border: 1px solid var(--success-mid);
+        }
+        .btn-success:hover { background: var(--success-mid); transform: scale(1.03); }
+
+        .btn-ghost {
+            background: var(--border);
+            color: var(--ink-secondary);
+            border: 1px solid var(--border-strong);
+        }
+        .btn-ghost:hover { background: var(--border-strong); transform: scale(1.03); }
+
+        /* ─────────────────────────────────────────
+           FORM ELEMENTS
+        ───────────────────────────────────────── */
+        .form-group { margin-bottom: 18px; }
+
+        .form-group label,
+        form p label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: var(--ink-tertiary);
+            margin-bottom: 7px;
+            transition: color 0.40s ease;
+        }
+
+        .form-input,
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px 16px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-strong);
+            border-radius: 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            color: var(--ink);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-input:focus,
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--accent);
+            background: var(--input-focus-bg);
+            box-shadow: 0 0 0 3px var(--accent-soft), 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .form-input::placeholder,
+        input::placeholder,
+        textarea::placeholder { color: var(--ink-ghost); }
+
+        textarea { resize: vertical; min-height: 100px; line-height: 1.55; }
+        form p   { margin-bottom: 18px; }
+
+        /* ─────────────────────────────────────────
+           FOOTER
+        ───────────────────────────────────────── */
+        .footer {
+            width: 100%;
+            max-width: 1020px;
+            margin-top: 32px;
+            padding: 18px 24px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--ink-tertiary);
+            background: var(--footer-bg);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: background 0.40s ease, color 0.40s ease, border-color 0.40s ease;
+        }
+
+        .footer-brand {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            color: var(--ink-secondary);
+            letter-spacing: -0.2px;
+        }
+
+        /* ─────────────────────────────────────────
+           DIVIDER / UTILS
+        ───────────────────────────────────────── */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 24px 0;
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--ink-ghost); border-radius: 99px; }
+        ::selection { background: var(--accent-mid); }
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+        /* ═══════════════════════════════════════════
+           DID YOU KNOW — FLOATING TOAST
+        ═══════════════════════════════════════════ */
+        .dyk-toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            z-index: 9000;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            max-width: 420px;
+            width: calc(100vw - 48px);
+            padding: 16px 20px;
+            background: var(--glass);
+            backdrop-filter: saturate(200%) blur(32px);
+            -webkit-backdrop-filter: saturate(200%) blur(32px);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            box-shadow: var(--shadow-card), 0 0 0 1px rgba(255,255,255,0.10) inset;
+            opacity: 0;
+            pointer-events: none;
+            transition:
+                opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .dyk-toast.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        .dyk-icon {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            background: linear-gradient(135deg, var(--accent-soft), var(--accent-mid));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 1px solid var(--accent-mid);
+        }
+
+        .dyk-body { flex: 1; }
+
+        .dyk-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .dyk-text {
+            font-size: 13.5px;
+            line-height: 1.50;
+            color: var(--ink-secondary);
+            font-style: italic;
+            transition: color 0.40s ease;
+        }
+
+        .dyk-close {
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            background: var(--border);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--ink-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s ease, transform 0.15s ease;
+            margin-top: 2px;
+        }
+
+        .dyk-close:hover {
+            background: var(--border-strong);
+            transform: scale(1.10);
+        }
+
+        /* Progress bar inside toast */
+        .dyk-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 0 0 18px 18px;
+            width: 100%;
+            transform-origin: left;
+            transform: scaleX(1);
+            transition: transform linear;
+            opacity: 0.45;
+        }
+
+        /* ═══════════════════════════════════════════
+           AWARD / ACHIEVEMENT NOTIFICATION
+        ═══════════════════════════════════════════ */
+        .award-container {
+            position: fixed;
+            top: 72px;
+            right: 24px;
+            z-index: 9100;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .award-toast {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            background: var(--glass);
+            backdrop-filter: saturate(200%) blur(32px);
+            -webkit-backdrop-filter: saturate(200%) blur(32px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--shadow-card),
+                        0 0 0 1px rgba(255,255,255,0.10) inset;
+            min-width: 280px;
+            max-width: 340px;
+            pointer-events: auto;
+            opacity: 0;
+            transform: translateX(110%);
+            transition:
+                opacity 0.50s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.50s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .award-toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .award-toast.hide {
+            opacity: 0;
+            transform: translateX(110%);
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .award-medal {
+            font-size: 32px;
+            line-height: 1;
+            animation: medalBounce 0.60s cubic-bezier(0.34, 1.56, 0.64, 1) 0.30s both;
+        }
+
+        @keyframes medalBounce {
+            from { transform: scale(0) rotate(-20deg); }
+            to   { transform: scale(1) rotate(0deg); }
+        }
+
+        .award-content {}
+
+        .award-subtitle {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            color: var(--success);
+            margin-bottom: 3px;
+        }
+
+        .award-title {
+            font-family: 'Fraunces', serif;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--ink);
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+            transition: color 0.40s ease;
+        }
+
+        .award-desc {
+            font-size: 12px;
+            color: var(--ink-tertiary);
+            margin-top: 2px;
+        }
+
+        /* Shimmer ring around medal */
+        .award-medal-wrap {
+            position: relative;
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .award-medal-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                rgba(255,215,0,0.55) 0%,
+                rgba(255,150,50,0.35) 25%,
+                rgba(255,215,0,0.55) 50%,
+                rgba(255,150,50,0.35) 75%,
+                rgba(255,215,0,0.55) 100%
+            );
+            animation: shimmerRing 2s linear infinite;
+            opacity: 0.85;
+        }
+
+        .award-medal-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border-radius: 50%;
+            background: var(--glass);
+        }
+
+        @keyframes shimmerRing {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        .award-stars {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            font-size: 14px;
+            animation: starPop 0.50s cubic-bezier(0.34, 1.56, 0.64, 1) 0.55s both;
+        }
+
+        @keyframes starPop {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        /* Confetti burst (canvas overlay) */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 9050;
+            pointer-events: none;
+        }
+
+        /* ─────────────────────────────────────────
+           SPRING + EASE VARS (re-declared for animations)
+        ───────────────────────────────────────── */
+        :root {
+            --spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
+            --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+            --r-sm:   10px;
+            --r-md:   14px;
+            --r-lg:   20px;
+            --r-xl:   28px;
+            --r-pill: 999px;
+        }
+
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+
+<body>
+    <!-- Confetti canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Animated orb backdrop -->
+    <div class="orb-stage" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+        <div class="orb orb-5"></div>
+    </div>
+
+    <!-- Frosted nav bar -->
+    <nav class="nav-bar">
+        <div class="nav-left">
+            <a href="{% url 'todo_list' %}" class="nav-brand">
+                <img src="{% static 'img/logo.png' %}" alt="Muwoni Logo" class="nav-logo">
+                <span class="nav-name">Muwoni</span>
+            </a>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:14px;">
+            <span class="nav-badge">{% block status_label %}Home{% endblock %}</span>
+
+            <!-- Dark / Light toggle -->
+            <div class="theme-toggle" id="themeToggle" role="switch" aria-checked="false" aria-label="Toggle dark mode" tabindex="0">
+                <span class="theme-toggle-icon icon-sun" aria-hidden="true">☀️</span>
+                <div class="theme-toggle-track">
+                    <div class="theme-toggle-thumb"></div>
+                </div>
+                <span class="theme-toggle-icon icon-moon" aria-hidden="true">🌙</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main scaffold -->
+    <div class="scaffold">
+        <div class="content-wrapper">
+            <div class="card">
+                {% block content %}{% endblock %}
+            </div>
+
+            <aside class="calendar-card">
+                <div class="calendar-header">
+                    <div class="calendar-month" id="calendar-month">April 2026</div>
+                    <div class="calendar-nav">
+                        <button class="calendar-nav-btn" id="prev-month" aria-label="Previous month">‹</button>
+                        <button class="calendar-nav-btn" id="next-month" aria-label="Next month">›</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendar-grid"><!-- JS fills --></div>
+            </aside>
+        </div>
+
+        <footer class="footer">
+            <span class="footer-brand">Muwoni Technologies</span> © {% now "Y" %} · All rights reserved
+        </footer>
+    </div>
+
+    <!-- ═══ DID YOU KNOW TOAST ═══ -->
+    <div class="dyk-toast" id="dykToast" role="status" aria-live="polite">
+        <div class="dyk-icon" id="dykIcon">💡</div>
+        <div class="dyk-body">
+            <div class="dyk-label">Did you know?</div>
+            <div class="dyk-text" id="dykText"></div>
+        </div>
+        <button class="dyk-close" id="dykClose" aria-label="Dismiss">✕</button>
+        <div class="dyk-progress" id="dykProgress"></div>
+    </div>
+
+    <!-- ═══ AWARD CONTAINER ═══ -->
+    <div class="award-container" id="awardContainer" aria-live="assertive"></div>
+
+    <script>
+    /* ════════════════════════════════════════════
+       THEME TOGGLE
+    ════════════════════════════════════════════ */
+    (function() {
+        const html      = document.documentElement;
+        const toggle    = document.getElementById('themeToggle');
+        const STORAGE_KEY = 'muwoni-theme';
+
+        function applyTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            toggle.setAttribute('aria-checked', theme === 'dark');
+            try { localStorage.setItem(STORAGE_KEY, theme); } catch(e) {}
+        }
+
+        // Restore saved preference or system preference
+        let saved;
+        try { saved = localStorage.getItem(STORAGE_KEY); } catch(e) {}
+        const preferred = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(preferred);
+
+        toggle.addEventListener('click', () => {
+            applyTheme(html.dataset.theme === 'dark' ? 'light' : 'dark');
+        });
+
+        toggle.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                toggle.click();
+            }
+        });
+
+        // Auto-switch on system change
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            try { if (!localStorage.getItem(STORAGE_KEY)) applyTheme(e.matches ? 'dark' : 'light'); } catch(_) {}
+        });
+    })();
+
+    /* ════════════════════════════════════════════
+       CALENDAR
+    ════════════════════════════════════════════ */
+    document.addEventListener('DOMContentLoaded', function() {
+        const monthEl  = document.getElementById('calendar-month');
+        const gridEl   = document.getElementById('calendar-grid');
+        const prevBtn  = document.getElementById('prev-month');
+        const nextBtn  = document.getElementById('next-month');
+
+        let currentDate = new Date();
+        let taskDates   = []; // Populate from Django: ['2026-04-28', '2026-04-30']
+
+        function renderCalendar(date) {
+            const year  = date.getFullYear();
+            const month = date.getMonth();
+
+            monthEl.textContent = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            const firstDay    = new Date(year, month, 1);
+            const lastDay     = new Date(year, month + 1, 0);
+            const startDay    = firstDay.getDay();
+            const daysInMonth = lastDay.getDate();
+            const today       = new Date();
+            const isCurMonth  = today.getFullYear() === year && today.getMonth() === month;
+
+            let html = '';
+            ['S','M','T','W','T','F','S'].forEach(d => {
+                html += `<div class="calendar-day-name">${d}</div>`;
+            });
+
+            const prevLastDay = new Date(year, month, 0).getDate();
+            for (let i = startDay - 1; i >= 0; i--) {
+                html += `<div class="calendar-date other-month">${prevLastDay - i}</div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const isToday = isCurMonth && day === today.getDate();
+                const dateStr = `${year}-${String(month + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+                const hasTask = taskDates.includes(dateStr);
+                let classes   = 'calendar-date';
+                if (isToday)  classes += ' today';
+                if (hasTask)  classes += ' has-task';
+                html += `<div class="${classes}" data-date="${dateStr}">${day}</div>`;
+            }
+
+            const totalCells = 7 + startDay + daysInMonth;
+            const remaining  = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let i = 1; i <= remaining; i++) {
+                html += `<div class="calendar-date other-month">${i}</div>`;
+            }
+            gridEl.innerHTML = html;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+        nextBtn.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+        gridEl.addEventListener('click', (e) => {
+            if (e.target.classList.contains('calendar-date') && !e.target.classList.contains('other-month')) {
+                console.log('Selected date:', e.target.dataset.date);
+            }
+        });
+
+        renderCalendar(currentDate);
+    });
+
+    /* ════════════════════════════════════════════
+       DID YOU KNOW — TOAST ROTATOR
+    ════════════════════════════════════════════ */
+    (function() {
+        const facts = [
+            { icon: '🚀', text: 'This is my very first project — every pixel built with passion!' },
+            { icon: '🍎', text: 'This style is inspired by iOS — clean, frosted, and beautifully minimal.' },
+            { icon: '🏠', text: 'The Muwoni company started in a garage — just a dream and a laptop.' },
+            { icon: '📹', text: 'Before Muwoni, our founder installed CCTV systems — from cameras to code!' },
+            { icon: '🌍', text: 'Muwoni is proudly built in Zimbabwe, for the world.' },
+            { icon: '⚡', text: 'The name Muwoni means "witness" in Shona — we witness your productivity.' },
+        ];
+
+        const toast    = document.getElementById('dykToast');
+        const textEl   = document.getElementById('dykText');
+        const iconEl   = document.getElementById('dykIcon');
+        const closeBtn = document.getElementById('dykClose');
+        const progress = document.getElementById('dykProgress');
+
+        let currentIdx = 0;
+        let timer      = null;
+        let progressTimer = null;
+        const DISPLAY_MS  = 6000;
+        const GAP_MS      = 12000;
+
+        function showFact(idx) {
+            const fact = facts[idx % facts.length];
+            iconEl.textContent = fact.icon;
+            textEl.textContent = fact.text;
+
+            // Reset & animate progress bar
+            progress.style.transition = 'none';
+            progress.style.transform  = 'scaleX(1)';
+            void progress.offsetWidth; // reflow
+            progress.style.transition = `transform ${DISPLAY_MS}ms linear`;
+            progress.style.transform  = 'scaleX(0)';
+
+            toast.classList.add('visible');
+
+            timer = setTimeout(() => {
+                hideFact();
+            }, DISPLAY_MS);
+        }
+
+        function hideFact() {
+            toast.classList.remove('visible');
+            clearTimeout(timer);
+            scheduleNext();
+        }
+
+        function scheduleNext() {
+            currentIdx = (currentIdx + 1) % facts.length;
+            setTimeout(() => showFact(currentIdx), GAP_MS);
+        }
+
+        closeBtn.addEventListener('click', hideFact);
+
+        // Pause on hover
+        toast.addEventListener('mouseenter', () => {
+            clearTimeout(timer);
+            progress.style.transition = 'none';
+        });
+        toast.addEventListener('mouseleave', () => {
+            timer = setTimeout(hideFact, 1500);
+        });
+
+        // Start after 3s delay
+        setTimeout(() => showFact(0), 3000);
+    })();
+
+    /* ════════════════════════════════════════════
+       AWARD SYSTEM — call window.grantAward(config)
+    ════════════════════════════════════════════ */
+    (function() {
+        const container = document.getElementById('awardContainer');
+
+        const AWARDS = {
+            first_task:   { medal: '🥇', title: 'First Blood!',      desc: 'You completed your very first task.',      color: '#FFD700' },
+            streak_3:     { medal: '🔥', title: 'On Fire!',           desc: '3 tasks crushed in a row.',               color: '#FF6B35' },
+            streak_5:     { medal: '⚡', title: 'Electric!',          desc: '5 tasks down — unstoppable!',             color: '#5B93FF' },
+            daily_done:   { medal: '🏆', title: 'Daily Champion',     desc: 'All tasks for today are done!',           color: '#1A9E5E' },
+            speed_demon:  { medal: '💨', title: 'Speed Demon',        desc: 'Completed a task in under 60 seconds.',   color: '#9D6FFF' },
+            consistent:   { medal: '📅', title: 'Consistent',         desc: 'Tasks completed 3 days in a row.',        color: '#38D4AA' },
+            task_done:    { medal: '✅', title: 'Task Complete!',      desc: 'Great job finishing that task.',          color: '#1A9E5E' },
+        };
+
+        window.grantAward = function(key) {
+            const award = AWARDS[key] || AWARDS['task_done'];
+            showAwardToast(award);
+        };
+
+        // Also expose a simpler hook for task completion
+        window.onTaskCompleted = function(taskName) {
+            showAwardToast({
+                medal: '✅',
+                title: 'Task Complete!',
+                desc:  taskName ? `"${taskName}" is done. Nice work!` : 'You finished a task. Keep going!',
+                color: '#1A9E5E',
+            });
+            launchConfetti();
+        };
+
+        function showAwardToast(award) {
+            const el = document.createElement('div');
+            el.className = 'award-toast';
+            el.innerHTML = `
+                <div class="award-medal-wrap">
+                    <div class="award-medal">${award.medal}</div>
+                    <div class="award-stars">✨</div>
+                </div>
+                <div class="award-content">
+                    <div class="award-subtitle">Achievement Unlocked</div>
+                    <div class="award-title">${award.title}</div>
+                    <div class="award-desc">${award.desc}</div>
+                </div>
+            `;
+            el.style.borderLeft = `3px solid ${award.color}`;
+            container.prepend(el);
+
+            // Animate in
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => el.classList.add('show'));
+            });
+
+            // Auto-dismiss after 5s
+            setTimeout(() => {
+                el.classList.add('hide');
+                el.addEventListener('transitionend', () => el.remove(), { once: true });
+            }, 5000);
+
+            el.addEventListener('click', () => {
+                el.classList.add('hide');
+                el.addEventListener('transitionend', () => el.remove(), { once: true });
+            });
+        }
+
+        /* ─── CONFETTI ─── */
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx    = canvas.getContext('2d');
+        let pieces   = [];
+        let animId   = null;
+
+        function launchConfetti() {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const colors = ['#FFD700','#FF6B35','#5B93FF','#3DD68C','#FF6B9D','#D8BFFF','#FFE999'];
+            pieces = Array.from({ length: 80 }, () => ({
+                x:    Math.random() * canvas.width,
+                y:    Math.random() * canvas.height * 0.4 - canvas.height * 0.1,
+                vx:   (Math.random() - 0.5) * 6,
+                vy:   Math.random() * 4 + 2,
+                rot:  Math.random() * 360,
+                rotV: (Math.random() - 0.5) * 8,
+                w:    Math.random() * 10 + 6,
+                h:    Math.random() * 5 + 3,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                alpha: 1,
+            }));
+
+            if (animId) cancelAnimationFrame(animId);
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let alive = false;
+            pieces.forEach(p => {
+                p.x   += p.vx;
+                p.y   += p.vy;
+                p.vy  += 0.12;
+                p.rot += p.rotV;
+                if (p.y > canvas.height * 0.7) p.alpha -= 0.025;
+                if (p.alpha > 0) {
+                    alive = true;
+                    ctx.save();
+                    ctx.globalAlpha = Math.max(0, p.alpha);
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rot * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.restore();
+                }
+            });
+            if (alive) animId = requestAnimationFrame(animateConfetti);
+            else ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width  = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    })();
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
