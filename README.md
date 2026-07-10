@@ -19,6 +19,9 @@ https://github.com/big21josh/muwoni-completed-project
 - Information page about Muwoni Technologies
 - Deployed using Render
 
+## Screenshots of the app are in (App Screenshots Folder)
+
+- App Screenshots
 ## Tech Stack
 
 - Python
