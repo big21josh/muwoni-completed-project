@@ -130,7 +130,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0;
         color: transparent;
         transition:
             background 0.22s var(--spring),
@@ -138,6 +137,19 @@
             transform 0.20s var(--spring),
             box-shadow 0.2s ease;
         padding: 0;
+    }
+
+    .check-btn svg {
+        width: 12px;
+        height: 12px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        opacity: 0;
+        transform: scale(0.6);
+        transition: opacity 0.18s ease, transform 0.18s ease;
     }
 
     .check-btn:hover {
@@ -150,9 +162,13 @@
     .todo-item.completed .check-btn {
         background: var(--success);
         border-color: var(--success);
-        font-size: 11px;
         color: #fff;
         box-shadow: 0 0 12px var(--success-mid);
+    }
+
+    .todo-item.completed .check-btn svg {
+        opacity: 1;
+        transform: scale(1);
     }
 
     /* ── Todo text button ── */
@@ -272,20 +288,38 @@
         font-weight: 500;
         color: var(--success);
     }
+
+    .banner-icon,
+    .empty-icon svg,
+    .delete-link svg,
+    .new-btn svg {
+        width: 16px;
+        height: 16px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- Header -->
 <div class="page-header">
-    <h1 class="page-title">My Tasks</h1>
-    <a href="{% url 'todo_create' %}" class="btn btn-primary">＋&thinsp;New</a>
+    <h1 class="page-title">Tasks</h1>
+    <a href="{% url 'todo_create' %}" class="btn btn-primary">
+        <svg class="lucide new-btn" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+        <span>New</span>
+    </a>
 </div>
 
 {% if todos %}
     <!-- All-done banner (shown via JS when 100%) -->
     <div class="all-done-banner" id="allDoneBanner">
-        <span>🎉</span>
+        <span class="banner-icon">
+            <svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M4.93 4.93l2.83 2.83"></path><path d="M16.24 16.24l2.83 2.83"></path><path d="M2 12h4"></path><path d="M18 12h4"></path><path d="M4.93 19.07l2.83-2.83"></path><path d="M16.24 7.76l2.83-2.83"></path></svg>
+        </span>
         <span>All tasks complete — you're on fire today!</span>
     </div>
 
@@ -312,8 +346,8 @@
                   class="toggle-form">
                 {% csrf_token %}
                 <button type="submit" class="check-btn"
-                        title="{% if todo.completed %}Unmark{% else %}Complete{% endif %}">
-                    {% if todo.completed %}✓{% endif %}
+                        title="{% if todo.completed %}Unmark{% else %}Complete{% endif %}" aria-label="{% if todo.completed %}Unmark task{% else %}Mark task complete{% endif %}">
+                    <svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5 9.5 17 19 7.5"></path></svg>
                 </button>
                 <button type="submit" class="todo-text-btn">
                     <div class="todo-title">{{ todo.title }}</div>
@@ -325,17 +359,24 @@
 
             <!-- Delete -->
             <a href="{% url 'todo_delete' todo.id %}"
-               class="delete-link" title="Delete">✕</a>
+               class="delete-link" title="Delete" aria-label="Delete task">
+                <svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </a>
         </div>
         {% endfor %}
     </div>
 
 {% else %}
     <div class="empty-state">
-        <span class="empty-icon">🌿</span>
+        <span class="empty-icon">
+            <svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17c0-3 2-5.5 5-7.5"></path><path d="M16 7.5c1.7 1 3 3 3 5.5 0 3.9-3.1 7-7 7-1.9 0-3.7-.7-5-2"></path><path d="M14 4c1.2 1 2 2.7 2 4.5"></path><path d="M7 12.5c1.3-1.7 3.4-2.8 6-3.1"></path></svg>
+        </span>
         <div class="empty-title">All clear</div>
         <p class="empty-sub">Your task list is empty.<br>Add something to get moving.</p>
-        <a href="{% url 'todo_create' %}" class="btn btn-primary">＋&thinsp;Add First Task</a>
+        <a href="{% url 'todo_create' %}" class="btn btn-primary">
+            <svg class="lucide new-btn" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+            <span>Add First Task</span>
+        </a>
     </div>
 {% endif %}
 {% endblock %}

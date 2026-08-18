@@ -307,9 +307,26 @@
         }
 
         .theme-toggle-icon {
-            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
             transition: transform 0.40s var(--spring), opacity 0.30s ease;
             line-height: 1;
+            color: var(--ink-secondary);
+        }
+
+        .lucide,
+        .icon-svg {
+            width: 1em;
+            height: 1em;
+            display: block;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .theme-toggle-track {
@@ -444,7 +461,19 @@
             justify-content: center;
             color: var(--ink-secondary);
             transition: all 0.15s ease;
-            font-size: 16px;
+        }
+
+        .calendar-nav-btn svg,
+        .back-link svg,
+        .btn-primary svg,
+        .btn-ghost svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.1;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .calendar-nav-btn:hover {
@@ -725,8 +754,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            color: var(--accent);
             border: 1px solid var(--accent-mid);
+        }
+
+        .dyk-icon svg,
+        .award-medal svg,
+        .theme-toggle-icon svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .dyk-body { flex: 1; }
@@ -977,11 +1019,15 @@
 
             <!-- Dark / Light toggle -->
             <div class="theme-toggle" id="themeToggle" role="switch" aria-checked="false" aria-label="Toggle dark mode" tabindex="0">
-                <span class="theme-toggle-icon icon-sun" aria-hidden="true">☀️</span>
+                <span class="theme-toggle-icon icon-sun" aria-hidden="true">
+                    <svg class="lucide icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+                </span>
                 <div class="theme-toggle-track">
                     <div class="theme-toggle-thumb"></div>
                 </div>
-                <span class="theme-toggle-icon icon-moon" aria-hidden="true">🌙</span>
+                <span class="theme-toggle-icon icon-moon" aria-hidden="true">
+                    <svg class="lucide icon-svg" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 0 1 11.2 3a9 9 0 1 0 9.8 9.8Z"></path></svg>
+                </span>
             </div>
         </div>
     </nav>
@@ -997,8 +1043,12 @@
                 <div class="calendar-header">
                     <div class="calendar-month" id="calendar-month">April 2026</div>
                     <div class="calendar-nav">
-                        <button class="calendar-nav-btn" id="prev-month" aria-label="Previous month">‹</button>
-                        <button class="calendar-nav-btn" id="next-month" aria-label="Next month">›</button>
+                        <button class="calendar-nav-btn" id="prev-month" aria-label="Previous month">
+                            <svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+                        </button>
+                        <button class="calendar-nav-btn" id="next-month" aria-label="Next month">
+                            <svg class="lucide" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                        </button>
                     </div>
                 </div>
                 <div class="calendar-grid" id="calendar-grid"><!-- JS fills --></div>
@@ -1012,12 +1062,16 @@
 
     <!-- ═══ DID YOU KNOW TOAST ═══ -->
     <div class="dyk-toast" id="dykToast" role="status" aria-live="polite">
-        <div class="dyk-icon" id="dykIcon">💡</div>
+        <div class="dyk-icon" id="dykIcon">
+            <svg class="lucide icon-svg" viewBox="0 0 24 24"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.3 1 2.5V16h6v-0.1c0-1.2.3-1.8 1-2.5A6 6 0 0 0 12 3Z"></path></svg>
+        </div>
         <div class="dyk-body">
             <div class="dyk-label">Did you know?</div>
             <div class="dyk-text" id="dykText"></div>
         </div>
-        <button class="dyk-close" id="dykClose" aria-label="Dismiss">✕</button>
+        <button class="dyk-close" id="dykClose" aria-label="Dismiss">
+            <svg class="lucide icon-svg" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
         <div class="dyk-progress" id="dykProgress"></div>
     </div>
 
@@ -1136,13 +1190,17 @@
        DID YOU KNOW — TOAST ROTATOR
     ════════════════════════════════════════════ */
     (function() {
+        function makeIcon(svg) {
+            return `<svg class="lucide icon-svg" viewBox="0 0 24 24">${svg}</svg>`;
+        }
+
         const facts = [
-            { icon: '🚀', text: 'This is my very first project — every pixel built with passion!' },
-            { icon: '🍎', text: 'This style is inspired by iOS — clean, frosted, and beautifully minimal.' },
-            { icon: '🏠', text: 'The Muwoni company started in a garage — just a dream and a laptop.' },
-            { icon: '📹', text: 'Before Muwoni, our founder installed CCTV systems — from cameras to code!' },
-            { icon: '🌍', text: 'Muwoni is proudly built in Zimbabwe, for the world.' },
-            { icon: '⚡', text: 'The name Muwoni means "witness" in Shona — we witness your productivity.' },
+            { icon: makeIcon('<path d="M5 16 9 12l3 3 7-7"></path><path d="M19 8h-5V3"></path><path d="M12 2v4"></path><path d="M4 12a8 8 0 1 0 16 0"></path>'), text: 'This is my very first project — every pixel built with passion!' },
+            { icon: makeIcon('<path d="M12 5c-3.3 0-6 2.7-6 6 0 4.4 3.6 8 6 8s6-3.6 6-8c0-3.3-2.7-6-6-6Z"></path><path d="M14 9c-1 .7-2 1-3.5 1"></path><path d="M12 2v3"></path><path d="M12 17v5"></path>'), text: 'This style is inspired by iOS — clean, frosted, and beautifully minimal.' },
+            { icon: makeIcon('<path d="M3 10.5V5.5A1.5 1.5 0 0 1 4.5 4H9l1.5 2H19.5A1.5 1.5 0 0 1 21 7.5v3A1.5 1.5 0 0 1 19.5 12H4.5A1.5 1.5 0 0 1 3 10.5Z"></path><path d="M4 13v5.5A1.5 1.5 0 0 0 5.5 20H18.5A1.5 1.5 0 0 0 20 18.5V13"></path>'), text: 'The Muwoni company started in a garage — just a dream and a laptop.' },
+            { icon: makeIcon('<path d="M4 7.5V5.5A1.5 1.5 0 0 1 5.5 4h5.7a1.5 1.5 0 0 1 1.1.5l1.3 1.7H18.5A1.5 1.5 0 0 1 20 7.7v9.8A1.5 1.5 0 0 1 18.5 19H5.5A1.5 1.5 0 0 1 4 17.5V7.5Z"></path><path d="M9 13h6"></path><path d="M9 16h4"></path>'), text: 'Before Muwoni, our founder installed CCTV systems — from cameras to code!' },
+            { icon: makeIcon('<circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a15 15 0 0 1 0 18"></path><path d="M12 3a15 15 0 0 0 0 18"></path>'), text: 'Muwoni is proudly built in Zimbabwe, for the world.' },
+            { icon: makeIcon('<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"></path>'), text: 'The name Muwoni means "the observer" — The one that sees.' },
         ];
 
         const toast    = document.getElementById('dykToast');
@@ -1159,7 +1217,7 @@
 
         function showFact(idx) {
             const fact = facts[idx % facts.length];
-            iconEl.textContent = fact.icon;
+            iconEl.innerHTML = fact.icon;
             textEl.textContent = fact.text;
 
             // Reset & animate progress bar
@@ -1209,13 +1267,13 @@
         const container = document.getElementById('awardContainer');
 
         const AWARDS = {
-            first_task:   { medal: '🥇', title: 'First Blood!',      desc: 'You completed your very first task.',      color: '#FFD700' },
-            streak_3:     { medal: '🔥', title: 'On Fire!',           desc: '3 tasks crushed in a row.',               color: '#FF6B35' },
-            streak_5:     { medal: '⚡', title: 'Electric!',          desc: '5 tasks down — unstoppable!',             color: '#5B93FF' },
-            daily_done:   { medal: '🏆', title: 'Daily Champion',     desc: 'All tasks for today are done!',           color: '#1A9E5E' },
-            speed_demon:  { medal: '💨', title: 'Speed Demon',        desc: 'Completed a task in under 60 seconds.',   color: '#9D6FFF' },
-            consistent:   { medal: '📅', title: 'Consistent',         desc: 'Tasks completed 3 days in a row.',        color: '#38D4AA' },
-            task_done:    { medal: '✅', title: 'Task Complete!',      desc: 'Great job finishing that task.',          color: '#1A9E5E' },
+            first_task:   { medal: '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M7 3h10v4l-2.5 2.5L15 12l-3-2-3 2 0.5-2.5L7 7V3Z"></path><path d="M7 15h10v6H7z"></path></svg>', title: 'First Blood!',      desc: 'You completed your very first task.',      color: '#FFD700' },
+            streak_3:     { medal: '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"></path></svg>', title: 'On Fire!',           desc: '3 tasks crushed in a row.',               color: '#FF6B35' },
+            streak_5:     { medal: '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"></path></svg>', title: 'Electric!',          desc: '5 tasks down — unstoppable!',             color: '#5B93FF' },
+            daily_done:   { medal: '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10l1 9H6l1-9Z"></path><path d="M9 8h6"></path></svg>', title: 'Daily Champion',     desc: 'All tasks for today are done!',           color: '#1A9E5E' },
+            speed_demon:  { medal: '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M12 2v6"></path><path d="m9 9-3 3"></path><path d="M2 13h6"></path><path d="M14 17l5 5"></path><circle cx="12" cy="12" r="7"></circle></svg>', title: 'Speed Demon',        desc: 'Completed a task in under 60 seconds.',   color: '#9D6FFF' },
+            consistent:   { medal: '<svg class="icon-svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M8 2v4M16 2v4M3 10h18"></path></svg>', title: 'Consistent',         desc: 'Tasks completed 3 days in a row.',        color: '#38D4AA' },
+            task_done:    { medal: '<svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12.5 9.5 17 19 7.5"></path></svg>', title: 'Task Complete!',      desc: 'Great job finishing that task.',          color: '#1A9E5E' },
         };
 
         window.grantAward = function(key) {
@@ -1226,7 +1284,7 @@
         // Also expose a simpler hook for task completion
         window.onTaskCompleted = function(taskName) {
             showAwardToast({
-                medal: '✅',
+                medal: '<svg class="lucide icon-svg" viewBox="0 0 24 24"><path d="M5 12.5 9.5 17 19 7.5"></path></svg>',
                 title: 'Task Complete!',
                 desc:  taskName ? `"${taskName}" is done. Nice work!` : 'You finished a task. Keep going!',
                 color: '#1A9E5E',
@@ -1240,7 +1298,9 @@
             el.innerHTML = `
                 <div class="award-medal-wrap">
                     <div class="award-medal">${award.medal}</div>
-                    <div class="award-stars">✨</div>
+                    <div class="award-stars">
+                        <svg class="lucide icon-svg" viewBox="0 0 24 24"><path d="M12 2v4"></path><path d="m12 18 2.5-5.5L20 10l-5.5-2.5L12 2 9.5 7.5 4 10l5.5 2.5L12 18Z"></path><path d="M18 18v2"></path></svg>
+                    </div>
                 </div>
                 <div class="award-content">
                     <div class="award-subtitle">Achievement Unlocked</div>
