@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: muwoni-tasks
+    runtime: python
+    pythonVersion: 3.12
+    
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    
+    startCommand: gunicorn todoproject.wsgi:application
+    
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: PORT
+        value: "10000"
+    
+    # Ensure Render uses the correct directory
+    rootDir: .
+    
+    # Health check
+    healthCheckPath: /
+
+# Optional: Cron jobs or other services can be added here
